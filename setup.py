@@ -24,7 +24,12 @@ setup(
         [console_scripts]
         feed-to-sqlite=feed_to_sqlite.cli:cli
     """,
-    install_requires=["sqlite-utils~=1.11", "requests", "feedparser"],
+    install_requires=[
+        "sqlite-utils~=1.11",
+        "requests",
+        "feedparser",
+        "awesome-slugify",
+    ],
     extras_require={"test": ["pytest"]},
     tests_require=["feed-to-sqlite[test]"],
 )
