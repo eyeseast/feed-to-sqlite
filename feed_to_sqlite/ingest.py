@@ -6,6 +6,8 @@ from sqlite_utils import Database
 
 slugify = Slugify(to_lower=True, separator="_", max_length=100)
 
+FEEDS_TABLE = "feeds"
+
 
 def ingest_feed(db, *, url=None, feed_content="", table_name=None, normalize=None):
     """
@@ -33,17 +35,21 @@ def ingest_feed(db, *, url=None, feed_content="", table_name=None, normalize=Non
         # todo raise something here
         return
 
-    table = get_table(db, table_name, f.feed)
+    feeds = get_feeds_table(db, FEEDS_TABLE)
+    feeds.upsert(extract_feed_fields(feeds, f.feed))
+
+    entries = get_entries_table(db, table_name, f.feed)
 
     if not callable(normalize):
-        normalize = extract_fields
+        normalize = extract_entry_fields
 
-    rows = (normalize(table, entry, f.feed) for entry in f.entries)
+    rows = (normalize(entries, entry, f.feed) for entry in f.entries)
+    rows = filter(bool, rows)
 
-    table.upsert_all(rows, pk="id")
+    entries.upsert_all(rows, pk="id")
 
 
-def get_table(db, table_name, feed):
+def get_entries_table(db, table_name, feed):
     "Get or create a table"
     if not table_name:
         table_name = slugify(feed.title)
@@ -65,17 +71,57 @@ def get_table(db, table_name, feed):
             "link": str,
         },
         pk="id",
+        foreign_keys=[("feed", "feeds")],
     )
 
 
-def extract_fields(table, entry, feed):
+def get_feeds_table(db, table_name=FEEDS_TABLE):
+    """
+    Create our default feeds table
+    """
+    table = db[table_name]
+
+    if not table.exists:
+        table.create(
+            {
+                "id": str,
+                "title": str,
+                "subtitle": str,
+                "link": str,
+                "author": str,
+                "updated": datetime.datetime,
+            },
+            pk="id",
+        )
+
+    return table
+
+
+def extract_entry_fields(table, entry, feed):
     """
     Given a table intance, entry dict and feed details, extract fields found in the table
     """
-    row = {"feed": feed.title}
+    row = {"feed": feed.get("id", feed.link)}
     for key in table.columns_dict:
         value = entry.get(key)
         if value is not None:
             row[key] = value
+
+    return row
+
+
+def extract_feed_fields(table, feed):
+    """
+    Similar to extract_entry_fields, but for top-level metadata
+    """
+    row = {}
+    for key in table.columns_dict:
+        value = feed.get(key)
+        if value is not None:
+            row[key] = value
+
+    # is there ever a case where a feed doesn't have a link?
+    row.setdefault("id", row["link"])
+    row.setdefault("updated", datetime.datetime.now())
 
     return row

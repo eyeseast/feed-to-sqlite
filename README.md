@@ -28,6 +28,8 @@ feed-to-sqlite feeds.db --table links <url> <url>
 
 That will put all items in a table called `links`.
 
+Each feed also creates an entry in a `feeds` table containing top-level metadata for each feed. Each item will have a foreign key to the originating feed. This is especially useful if combining feeds into a shared table.
+
 ## Python API
 
 One function, `ingest_feed`, does most of the work here. The following will create a database called `feeds.db` and download my NewsBlur shared items into a new table called `links`.
