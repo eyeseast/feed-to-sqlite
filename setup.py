@@ -27,4 +27,15 @@ setup(
     install_requires=["sqlite-utils", "requests", "feedparser", "awesome-slugify",],
     extras_require={"test": ["pytest"]},
     tests_require=["feed-to-sqlite[test]"],
+    url="https://github.com/eyeseast/feed-to-sqlite",
+    classifiers=[
+        "Development Status :: 3 - Alpha",
+        "Intended Audience :: Developers",
+        "Intended Audience :: End Users/Desktop",
+        "License :: OSI Approved :: Apache Software License",
+        "Topic :: Database",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+    ],
 )
