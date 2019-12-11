@@ -28,4 +28,16 @@ That will put all items in a table called `links`.
 
 ## Python API
 
-TBD
+One function, `ingest_feed`, does most of the work here. The following will create a database called `feeds.db` and download my NewsBlur shared items into a new table called `links`.
+
+```python
+from feed_to_sqlite import ingest_feed
+
+url = "http://chrisamico.newsblur.com/social/rss/35501/chrisamico"
+
+ingest_feed("feeds.db", url=url, table_name="links")
+```
+
+## Development
+
+Tests use [pytest](https://docs.pytest.org/). Run `pytest tests/` to run the test suite.
