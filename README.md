@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/eyeseast/feed-to-sqlite.svg?branch=master)](https://travis-ci.com/eyeseast/feed-to-sqlite)
+
 # feed-to-sqlite
 
 Download an RSS or Atom feed and save it to a SQLite database. This is meant to work well with [datasette](https://github.com/simonw/datasette).
