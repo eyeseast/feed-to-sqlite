@@ -6,6 +6,6 @@ python:
 
 install:
   - "pip install -e ./"
-  - "pip install pyenv"
+  - "pip install pytest"
 
-script: "pyenv tests/"
+script: "pytest tests/"
