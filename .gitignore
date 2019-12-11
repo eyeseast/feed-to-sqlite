@@ -83,3 +83,7 @@ pyvenv.cfg
 
 # vscode
 .vscode
+
+# databases
+*.db
+*.sqlite
