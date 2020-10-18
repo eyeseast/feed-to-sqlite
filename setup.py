@@ -24,7 +24,7 @@ setup(
         [console_scripts]
         feed-to-sqlite=feed_to_sqlite.cli:cli
     """,
-    install_requires=["sqlite-utils", "requests", "feedparser", "awesome-slugify",],
+    install_requires=["sqlite-utils>=2.22", "requests", "feedparser", "awesome-slugify",],
     extras_require={"test": ["pytest"]},
     tests_require=["feed-to-sqlite[test]"],
     url="https://github.com/eyeseast/feed-to-sqlite",
