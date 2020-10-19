@@ -36,7 +36,7 @@ def ingest_feed(db, *, url=None, feed_content="", table_name=None, normalize=Non
         return
 
     feeds = get_feeds_table(db, FEEDS_TABLE)
-    feeds.upsert(extract_feed_fields(feeds, f.feed))
+    feeds.upsert(extract_feed_fields(feeds, f.feed), pk="id")
 
     entries = get_entries_table(db, table_name, f.feed)
 
@@ -81,7 +81,7 @@ def get_feeds_table(db, table_name=FEEDS_TABLE):
     """
     table = db[table_name]
 
-    if not table.exists:
+    if not table.exists():
         table.create(
             {
                 "id": str,
