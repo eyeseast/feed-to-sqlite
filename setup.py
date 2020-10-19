@@ -1,7 +1,7 @@
 from setuptools import setup
 import os
 
-VERSION = "0.2.0"
+VERSION = "0.3.0"
 
 README = os.path.join(os.path.dirname(os.path.abspath(__file__)), "README.md")
 
@@ -24,7 +24,12 @@ setup(
         [console_scripts]
         feed-to-sqlite=feed_to_sqlite.cli:cli
     """,
-    install_requires=["sqlite-utils>=2.22", "requests", "feedparser", "awesome-slugify",],
+    install_requires=[
+        "sqlite-utils>=2.22",
+        "requests",
+        "feedparser",
+        "awesome-slugify",
+    ],
     extras_require={"test": ["pytest"]},
     tests_require=["feed-to-sqlite[test]"],
     url="https://github.com/eyeseast/feed-to-sqlite",
