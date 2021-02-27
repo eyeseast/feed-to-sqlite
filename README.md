@@ -1,4 +1,7 @@
 [![Build Status](https://travis-ci.com/eyeseast/feed-to-sqlite.svg?branch=master)](https://travis-ci.com/eyeseast/feed-to-sqlite)
+[![Tests](https://github.com/eyeseast/feed-to-sqlite/workflows/Test/badge.svg)](https://github.com/eyeseast/feed-to-sqlite/actions?query=workflow%3ATest)
+[![PyPI](https://img.shields.io/pypi/v/feed-to-sqlite.svg)](https://pypi.org/project/feed-to-sqlite/)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/eyeseast/feed-to-sqlite/blob/master/LICENSE)
 
 # feed-to-sqlite
 
