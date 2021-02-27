@@ -1,7 +1,7 @@
 from setuptools import setup
 import os
 
-VERSION = "0.3.0"
+VERSION = "0.4.0"
 
 README = os.path.join(os.path.dirname(os.path.abspath(__file__)), "README.md")
 
@@ -26,7 +26,7 @@ setup(
     """,
     install_requires=[
         "sqlite-utils>=2.22",
-        "requests",
+        "httpx",
         "feedparser",
         "awesome-slugify",
     ],

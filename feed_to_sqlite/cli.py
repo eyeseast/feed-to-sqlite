@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import click
+import httpx
 
 from .ingest import ingest_feed
 
@@ -13,5 +14,6 @@ from .ingest import ingest_feed
 )
 @click.argument("urls", nargs=-1)
 def cli(database, urls, table=None):
-    for url in urls:
-        ingest_feed(database, table_name=table, url=url)
+    with httpx.Client() as client:
+        for url in urls:
+            ingest_feed(database, table_name=table, url=url, client=client)
