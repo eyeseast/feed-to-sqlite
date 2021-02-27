@@ -1,6 +1,6 @@
 import datetime
 import feedparser
-import requests
+import httpx
 from slugify import Slugify
 from sqlite_utils import Database
 
@@ -9,24 +9,31 @@ slugify = Slugify(to_lower=True, separator="_", max_length=100)
 FEEDS_TABLE = "feeds"
 
 
-def ingest_feed(db, *, url=None, feed_content="", table_name=None, normalize=None):
+def ingest_feed(
+    db, *, url=None, feed_content="", table_name=None, normalize=None, client=None
+):
     """
     `db` is a path or Database instance
-    
+
     if `table_name` is None, auto create from feed title
-    
+
     if `url` is given, fetch and parse
-    
+
     if `feed_content` is given, but not url, parse that
 
     `normalize` is a function that will be called on each feed item, useful for fixing links
     or doing additional work. It's signature is normalize(table, entry, feed_details).
+
+    `client` is an instance of `httpx.Client` to pool requests.
     """
     if not isinstance(db, Database):
         db = Database(db)
 
+    if client is None:
+        client = httpx.Client()
+
     if url:
-        r = requests.get(url)
+        r = client.get(url)
         r.raise_for_status()
         feed_content = r.text
 
