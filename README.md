@@ -45,6 +45,14 @@ url = "http://chrisamico.newsblur.com/social/rss/35501/chrisamico"
 ingest_feed("feeds.db", url=url, table_name="links")
 ```
 
+### Transforming data on ingest
+
+When working in Python directly, it's possible to pass in a function to transform rows before they're saved to the database.
+
+The `normalize` argument to `ingest_feed` is a function that will be called on each feed item, useful for fixing links or doing additional work. It's signature is `normalize(table, entry, feed_details)`, where `table` is a SQLite table ([from sqlite-utils](https://sqlite-utils.datasette.io/en/stable/python-api.html#accessing-tables)), `entry` is one feed item, as a dictionary, and `feed_details` is a dictionary of top-level feed information, as a dictionary.
+
+That function should return a dictionary representing the row to be saved.
+
 ## Development
 
 Tests use [pytest](https://docs.pytest.org/). Run `pytest tests/` to run the test suite.

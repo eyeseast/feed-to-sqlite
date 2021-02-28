@@ -5,11 +5,11 @@ import pytest
 import sqlite_utils
 
 from feed_to_sqlite import ingest_feed
-from feed_to_sqlite.ingest import FEEDS_TABLE
+from feed_to_sqlite.ingest import FEEDS_TABLE, extract_entry_fields
 
 
 def feed(name):
-    with open(pathlib.Path(__file__).parent / name) as f:
+    with (pathlib.Path(__file__).parent / name).open() as f:
         return f.read()
 
 
@@ -61,3 +61,17 @@ def test_shared_table(db, newsblur, instapaper):
     assert table_name in db.table_names()
 
     assert db[table_name].count == 35
+
+
+def test_transform_feed(db, instapaper):
+    def capitalize(table, entry, feed_details):
+        row = extract_entry_fields(table, entry, feed_details)
+        row["title"] = row["title"].upper()
+        return row
+
+    ingest_feed(db, feed_content=instapaper, table_name="links", normalize=capitalize)
+    feed = feedparser.parse(instapaper)
+
+    for entry in feed.entries:
+        row = db["links"].get(entry.id)
+        assert row["title"] == entry["title"].upper()
