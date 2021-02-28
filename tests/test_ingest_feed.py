@@ -64,7 +64,7 @@ def test_shared_table(db, newsblur, instapaper):
 
 
 def test_transform_feed(db, instapaper):
-    def capitalize(table, entry, feed_details):
+    def capitalize(table, entry, feed_details, client=None):
         row = extract_entry_fields(table, entry, feed_details)
         row["title"] = row["title"].upper()
         return row

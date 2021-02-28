@@ -50,7 +50,7 @@ def ingest_feed(
     if not callable(normalize):
         normalize = extract_entry_fields
 
-    rows = (normalize(entries, entry, f.feed) for entry in f.entries)
+    rows = (normalize(entries, entry, f.feed, client) for entry in f.entries)
     rows = filter(bool, rows)
 
     entries.upsert_all(rows, pk="id")
@@ -104,7 +104,7 @@ def get_feeds_table(db, table_name=FEEDS_TABLE):
     return table
 
 
-def extract_entry_fields(table, entry, feed):
+def extract_entry_fields(table, entry, feed, client=None):
     """
     Given a table intance, entry dict and feed details, extract fields found in the table
     """

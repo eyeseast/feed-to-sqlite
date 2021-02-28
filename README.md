@@ -49,9 +49,16 @@ ingest_feed("feeds.db", url=url, table_name="links")
 
 When working in Python directly, it's possible to pass in a function to transform rows before they're saved to the database.
 
-The `normalize` argument to `ingest_feed` is a function that will be called on each feed item, useful for fixing links or doing additional work. It's signature is `normalize(table, entry, feed_details)`, where `table` is a SQLite table ([from sqlite-utils](https://sqlite-utils.datasette.io/en/stable/python-api.html#accessing-tables)), `entry` is one feed item, as a dictionary, and `feed_details` is a dictionary of top-level feed information, as a dictionary.
+The `normalize` argument to `ingest_feed` is a function that will be called on each feed item, useful for fixing links or doing additional work.
 
-That function should return a dictionary representing the row to be saved.
+It's signature is `normalize(table, entry, feed_details, client)`:
+
+- `table` is a SQLite table ([from sqlite-utils](https://sqlite-utils.datasette.io/en/stable/python-api.html#accessing-tables))
+- `entry` is one feed item, as a dictionary
+- `feed_details` is a dictionary of top-level feed information, as a dictionary
+- `client` is an instance of `httpx.Client`, which can be used for outgoing HTTP requests during normalization
+
+That function should return a dictionary representing the row to be saved. Returning a falsey value for a given row will cause that row to be skipped.
 
 ## Development
 
