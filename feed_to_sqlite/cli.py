@@ -8,9 +8,7 @@ from .ingest import ingest_feed
 @click.command()
 @click.version_option()
 @click.option("--table", help="Table name for all items")
-@click.option(
-    "--alter", is_flag=True, default=False, help="Add missing fields to table"
-)
+
 @click.argument(
     "database",
     type=click.Path(exists=False, file_okay=True, dir_okay=False, allow_dash=False),
