@@ -17,7 +17,7 @@ from .ingest import ingest_feed
     required=True,
 )
 @click.argument("urls", nargs=-1)
-def cli(database, urls, table=None):
+def cli(database, urls, table=None, alter=False):
     with httpx.Client() as client:
         for url in urls:
-            ingest_feed(database, table_name=table, url=url, client=client)
+            ingest_feed(database, table_name=table, url=url, client=client, alter=alter)

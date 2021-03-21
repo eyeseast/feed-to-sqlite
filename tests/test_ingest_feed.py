@@ -3,10 +3,8 @@ import pathlib
 import feedparser
 import pytest
 import sqlite_utils
-from click.testing import CliRunner
 
 from feed_to_sqlite import ingest_feed
-from feed_to_sqlite.cli import cli
 from feed_to_sqlite.ingest import FEEDS_TABLE, extract_entry_fields
 
 
@@ -28,14 +26,6 @@ def instapaper():
 @pytest.fixture
 def db():
     return sqlite_utils.Database(memory=True)
-
-
-def test_version():
-    runner = CliRunner()
-    with runner.isolated_filesystem():
-        result = runner.invoke(cli, ["--version"])
-        assert 0 == result.exit_code
-        assert result.output.startswith("cli, version ")
 
 
 def test_load_feed(db, newsblur):
