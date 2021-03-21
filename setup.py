@@ -1,7 +1,7 @@
 from setuptools import setup
 import os
 
-VERSION = "0.5.0"
+VERSION = "0.5.1"
 
 README = os.path.join(os.path.dirname(os.path.abspath(__file__)), "README.md")
 
