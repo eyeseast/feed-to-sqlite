@@ -9,26 +9,25 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v5
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - uses: actions/cache@v3
-        name: Configure pip caching
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
         with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/setup.py') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
+          enable-cache: true
+
       - name: Install dependencies
-        run: |
-          pip install -e '.[test]'
+        run: uv sync --locked --all-groups --dev
       - name: Run tests
         run: |
-          pytest
+          uv run pytest
+
   deploy:
     runs-on: ubuntu-latest
     needs: [test]
@@ -38,20 +37,14 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
-      - uses: actions/cache@v3
-        name: Configure pip caching
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
         with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-publish-pip-${{ hashFiles('**/setup.py') }}
-          restore-keys: |
-            ${{ runner.os }}-publish-pip-
+          enable-cache: true
+
       - name: Install dependencies
-        run: |
-          pip install setuptools wheel twine
+        run: uv sync --locked --all-groups --dev
+
       - name: Publish
-        env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
-        run: |
-          python setup.py sdist bdist_wheel
-          twine upload --verbose dist/*
+        run: uv publish
