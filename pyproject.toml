@@ -1,0 +1,38 @@
+[project]
+name = "feed-to-sqlite"
+version = "0.6.0"
+description = "Save an RSS or ATOM feed to a SQLITE database"
+readme = "README.md"
+authors = [{ name = "Chris Amico", email = "eyeseast@gmail.com" }]
+requires-python = ">=3.9"
+dependencies = ["sqlite-utils>=2.22", "httpx", "feedparser", "awesome-slugify"]
+license = "Apache-2.0"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: Apache Software License",
+    "Topic :: Database",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+
+[build-system]
+requires = ["uv_build>=0.8.13,<0.9.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-root = ""
+
+[dependency-groups]
+test = ["pytest>=8.4.1"]
+
+[project.scripts]
+feed-to-sqlite = "feed_to_sqlite.cli:cli"
+
+[project.urls]
+homepage = "https://github.com/eyeseast/feed-to-sqlite"
+source = "https://github.com/eyeseast/feed-to-sqlite"
