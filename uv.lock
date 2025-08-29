@@ -106,7 +106,7 @@ wheels = [
 
 [[package]]
 name = "feed-to-sqlite"
-version = "0.6.0"
+version = "0.6.1"
 source = { editable = "." }
 dependencies = [
     { name = "awesome-slugify" },
