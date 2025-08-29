@@ -39,6 +39,18 @@ def test_load_feed(db, newsblur):
     assert table.count == 25
 
 
+def test_fields(db, instapaper):
+    ingest_feed(db, feed_content=instapaper, table_name="instapaper")
+    feed = feedparser.parse(instapaper)
+    fields = ["title", "description", "published", "updated", "link"]
+
+    for entry in feed.entries:
+        row = db["instapaper"].get(entry.id)
+
+        for key in fields:
+            assert row[key] == entry.get(key)
+
+
 def test_feeds_table(db, newsblur, instapaper):
     "check that a feeds table is created"
     ingest_feed(db, feed_content=newsblur)

@@ -17,7 +17,7 @@ def ingest_feed(
     table_name=None,
     normalize=None,
     client=None,
-    alter=False
+    alter=False,
 ):
     """
     `db` is a path or Database instance
@@ -115,7 +115,6 @@ def extract_entry_fields(table, entry, feed, client=None):
     """
     Given a table intance, entry dict and feed details, extract fields found in the table
     """
-    entry = dict(entry)
     row = {"feed": feed.get("id", feed.link)}
     for key in table.columns_dict:
         value = entry.get(key)
