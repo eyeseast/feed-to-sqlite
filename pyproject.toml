@@ -1,6 +1,6 @@
 [project]
 name = "feed-to-sqlite"
-version = "0.6.1"
+version = "0.6.2"
 description = "Save an RSS or ATOM feed to a SQLITE database"
 readme = "README.md"
 authors = [{ name = "Chris Amico", email = "eyeseast@gmail.com" }]
