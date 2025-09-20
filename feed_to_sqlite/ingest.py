@@ -1,6 +1,8 @@
 import datetime
 import feedparser
 import httpx
+import time
+
 from slugify import Slugify
 from sqlite_utils import Database
 
@@ -37,7 +39,7 @@ def ingest_feed(
         db = Database(db)
 
     if client is None:
-        client = httpx.Client()
+        client = httpx.Client(headers={"user-agent": "feed-to-sqlite"})
 
     if url:
         r = client.get(url)
@@ -121,6 +123,12 @@ def extract_entry_fields(table, entry, feed, client=None):
         if value is not None:
             row[key] = value
 
+    if entry.get("published_parsed"):
+        row["published"] = parse_date(entry.published_parsed)
+
+    if entry.get("updated_parsed"):
+        row["updated"] = parse_date(entry.updated_parsed)
+
     return row
 
 
@@ -139,3 +147,11 @@ def extract_feed_fields(table, feed):
     row.setdefault("updated", datetime.datetime.now())
 
     return row
+
+
+def parse_date(tt, fallback=None):
+    "Convert a time tuple"
+    try:
+        return str(datetime.datetime.fromtimestamp(time.mktime(tt)))
+    except:
+        return fallback

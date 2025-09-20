@@ -5,7 +5,12 @@ description = "Save an RSS or ATOM feed to a SQLITE database"
 readme = "README.md"
 authors = [{ name = "Chris Amico", email = "eyeseast@gmail.com" }]
 requires-python = ">=3.9"
-dependencies = ["sqlite-utils>=2.22", "httpx", "feedparser", "awesome-slugify"]
+dependencies = [
+    "sqlite-utils>=2.22",
+    "httpx",
+    "feedparser",
+    "awesome-slugify",
+]
 license = "Apache-2.0"
 classifiers = [
     "Development Status :: 3 - Alpha",
