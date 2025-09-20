@@ -5,7 +5,7 @@ import pytest
 import sqlite_utils
 
 from feed_to_sqlite import ingest_feed
-from feed_to_sqlite.ingest import FEEDS_TABLE, extract_entry_fields
+from feed_to_sqlite.ingest import FEEDS_TABLE, extract_entry_fields, parse_date
 
 
 def feed(name):
@@ -42,13 +42,16 @@ def test_load_feed(db, newsblur):
 def test_fields(db, instapaper):
     ingest_feed(db, feed_content=instapaper, table_name="instapaper")
     feed = feedparser.parse(instapaper)
-    fields = ["title", "description", "published", "updated", "link"]
+    fields = ["title", "description", "link"]
 
     for entry in feed.entries:
         row = db["instapaper"].get(entry.id)
 
         for key in fields:
             assert row[key] == entry.get(key)
+
+        for key in ["published", "updated"]:
+            assert row[key] == parse_date(entry.get(f"{key}_parsed"))
 
 
 def test_feeds_table(db, newsblur, instapaper):
