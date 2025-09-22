@@ -1,4 +1,6 @@
+import datetime
 import pathlib
+import time
 
 import feedparser
 import pytest
@@ -56,6 +58,7 @@ def test_fields(db, instapaper):
 
 def test_feeds_table(db, newsblur, instapaper):
     "check that a feeds table is created"
+    start = datetime.datetime.now()
     ingest_feed(db, feed_content=newsblur)
     ingest_feed(db, feed_content=instapaper)
 
@@ -63,6 +66,10 @@ def test_feeds_table(db, newsblur, instapaper):
     assert len(db.tables) == 3
     assert FEEDS_TABLE in db.table_names()
     assert db[FEEDS_TABLE].count == 2
+
+    # newsblur has an updated date
+    nb = db[FEEDS_TABLE].get("http://chrisamico.newsblur.com/")
+    assert nb["updated"] == "2019-12-02 18:47:23"
 
 
 def test_shared_table(db, newsblur, instapaper):

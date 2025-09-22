@@ -144,6 +144,10 @@ def extract_feed_fields(table, feed):
 
     # is there ever a case where a feed doesn't have a link?
     row.setdefault("id", row["link"])
+
+    if feed.get("updated_parsed"):
+        row["updated"] = parse_date(feed.updated_parsed)
+
     row.setdefault("updated", datetime.datetime.now())
 
     return row
